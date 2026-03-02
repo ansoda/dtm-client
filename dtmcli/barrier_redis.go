@@ -1,6 +1,7 @@
 package dtmcli
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/dtm-labs/client/dtmcli/dtmimp"
@@ -17,7 +18,7 @@ func (bb *BranchBarrier) RedisCheckAdjustAmount(rd *redis.Client, key string, am
 		dtmimp.OpCompensate: dtmimp.OpAction,
 	}[bb.Op]
 	bkey2 := fmt.Sprintf("%s-%s-%s-%s", bb.Gid, bb.BranchID, originOp, bid)
-	v, err := rd.Eval(rd.Context(), ` -- RedisCheckAdjustAmount
+	v, err := rd.Eval(context.Background(), ` -- RedisCheckAdjustAmount
 local v = redis.call('GET', KEYS[1])
 local e1 = redis.call('GET', KEYS[2])
 
@@ -56,7 +57,7 @@ redis.call('INCRBY', KEYS[1], ARGV[1])
 // RedisQueryPrepared query prepared for redis
 func (bb *BranchBarrier) RedisQueryPrepared(rd *redis.Client, barrierExpire int) error {
 	bkey1 := fmt.Sprintf("%s-%s-%s-%s", bb.Gid, dtmimp.MsgDoBranch0, dtmimp.MsgDoOp, dtmimp.MsgDoBarrier1)
-	v, err := rd.Eval(rd.Context(), ` -- RedisQueryPrepared
+	v, err := rd.Eval(context.Background(), ` -- RedisQueryPrepared
 local v = redis.call('GET', KEYS[1])
 if v == false then
 	redis.call('SET', KEYS[1], 'rollback', 'EX', ARGV[1])
