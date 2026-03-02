@@ -5,7 +5,7 @@ import (
 
 	"github.com/dtm-labs/client/dtmcli/dtmimp"
 	"github.com/dtm-labs/logger"
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 )
 
 // RedisCheckAdjustAmount check the value of key is valid and >= amount. then adjust the amount
