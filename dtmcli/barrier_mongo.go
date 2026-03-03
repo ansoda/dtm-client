@@ -1,3 +1,5 @@
+//go:build dtm_mongo
+
 package dtmcli
 
 import (
